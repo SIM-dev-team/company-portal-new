@@ -296,12 +296,23 @@
     text-align: center;
 }
 
+.logo-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 20px;
+    border: 1px solid rgb(7, 7, 7);
+    box-shadow: 2px 2px 2px rgb(189, 199, 199);
+}
+
 .profile-description {
     width: 70%;
 }
 
 .profile-btn {
-    padding-left: 30%;
+    padding-top: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    justify-content: space-between;
 }
 
 .top-description {
@@ -317,9 +328,31 @@
     letter-spacing: 2px;
 }
 
-.approve {
+.not-approved {
     color: rgb(255, 255, 255);
     background-color: rgb(235, 101, 101);
     padding: 3px 10px;
     border-radius: 7px;
+}
+
+.approved {
+    color: rgb(255, 255, 255);
+    background-color: rgb(101, 235, 173);
+    padding: 3px 10px;
+    border-radius: 7px;
+}
+
+.profile-bottom-content {
+    width: 100%;
+    margin-top: 40px;
+    background-color: rgb(240, 240, 240);
+    text-align: center;
+}
+
+.profile-bottom-content-text {
+    margin: auto;
+    font-size: 40px;
+    padding: 50px;
+    font-weight: 700;
+    color: rgb(212, 213, 214);
 }
