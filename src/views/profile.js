@@ -3,6 +3,7 @@ import logo from '../assets/images/logo.jpg';
 import { useHistory } from "react-router-dom";
 import auth from '../Auth';
 import axios from 'axios';
+import default_logo from '../assets/images/profile_pic_default.png';
 
 
 function Profile(){
@@ -24,7 +25,7 @@ function Profile(){
       .then(res => {
           const currentCompany = {
               name: res.data.comp_name,
-              profile_pic: res.data.profile_pic_url,
+              profile_pic: (res.data.profile_pic_url === null ? default_logo : res.data.profile_pic_url ),
               description: res.data.description,
               is_approved:res.data.is_approved,
               comp_website: res.data.comp_website,
@@ -50,11 +51,15 @@ function Profile(){
         setAds(true);
         setNotifications(false);
     }
+
+    const profile_pic = () =>{
+        console.log('clicked')
+    }
     return(
         <div className="profile-content">
             <div className="row">
                 <div className="profile-logo">
-                    <img src={logo} alt="company-logo" className="logo-image"/>
+                    <img src={company.profile_pic} alt="company-logo" className="logo-image" onClick={profile_pic}/>
                 </div>
                 <div className="profile-description">
                     <div className="row top-description">
@@ -65,7 +70,7 @@ function Profile(){
                     <div>
                         {company.description}
                     </div>
-                    <div><a href={company.comp_website}>{company.comp_website}</a></div>
+                    <div><a href={'//'+company.comp_website} rel="noopener noreferrer" target="_blank">{company.comp_website}</a></div>
                     <div className="row profile-btn">
                 <div>
                 <button className={notifications ? 'active btn btn-primary' : 'btn btn-primary'} onClick={notificationsBtn}>Notifications</button>
