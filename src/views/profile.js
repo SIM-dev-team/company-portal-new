@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import auth from '../Auth';
 import axios from 'axios';
 import default_logo from '../assets/images/profile_pic_default.png';
+import Advert from '../components/advert';
 
 
 function Profile(){
@@ -81,6 +82,7 @@ function Profile(){
                         <div>{company.contact_number}</div>
                     </div>
                 </div>
+                <div className="vl"></div>
                 <div>
                     <div className="feed">
                         <div>
@@ -90,10 +92,14 @@ function Profile(){
                         <button className="btn btn-secondary" onClick={logout}>Logout</button>
                     </div>
                     <div className="profile-bottom-content">
-                        <div hidden={!notifications} className="none-text">No Notifications yet</div>
-                        <div hidden={!ads} className="profile-bottom-content-text">
+                        <div hidden={notifications} className="none-text">No Notifications yet</div>
+                        <div hidden={ads} className="profile-bottom-content-text">
                             <button className="create-new-add">+ Create new ad</button>
-                            <div hidden={!ads} className="none-text">No Advertiesments to show</div> 
+                            {/* <div hidden={!ads} className="none-text">No Advertiesments to show</div>  */}
+                            <div className="ad-list">
+                                <Advert/>
+                                <Advert/>
+                            </div>
                         </div> 
                     </div>
                 </div>

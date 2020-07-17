@@ -287,6 +287,8 @@
 .card {
     box-shadow: 2px 3px 3px rgb(189, 199, 199);
     padding: 10px;
+    /* background: rgb(120, 216, 234); */
+    background: linear-gradient(32deg, rgb(117, 202, 235) 0%, rgba(255, 255, 255, 0) 48%);
 }
 
 .profile-edit-details-container {
@@ -351,12 +353,11 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    border-left: 1px solid gray;
 }
 
 .create-new-add {
     position: fixed !important;
-    right: 6%;
+    right: 7%;
     background-color: rgb(67, 207, 231);
     border: none;
     font-size: 15px;
@@ -418,7 +419,7 @@
     overflow-x: hidden;
     overflow-y: auto;
     border-radius: 10px;
-    background-color: rgb(233, 233, 233);
+    background-color: rgba(228, 228, 228, 0.377);
 }
 
 .profile-bottom-content-text {
@@ -427,4 +428,84 @@
     padding: 20px;
     font-weight: 700;
     color: rgb(212, 213, 214);
+}
+
+.ad-list {
+    display: grid;
+    padding-top: 30px;
+}
+
+.vl {
+    width: 1px;
+    height: 80vh;
+    background-color: rgb(109, 109, 109);
+    margin-left: 30%;
+}
+
+
+/*=============================================== advert css ============================================*/
+
+.card-ad {
+    width: 90%;
+    margin: 10px 5%;
+    padding: 0 20px;
+    background-color: white;
+    box-shadow: 1px 1px 1px gray;
+}
+
+.ad-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.role-name {
+    font-size: 20px;
+    color: rgba(0, 0, 0, 0.61);
+    padding: 20px;
+    padding-bottom: 5px;
+}
+
+.is-approved {
+    color: white;
+    background-color: rgb(247, 99, 99);
+    border-radius: 5px;
+    padding: 10px;
+    margin: 20px;
+    font-size: 10px;
+    margin-bottom: 5px;
+}
+
+.ad-description {
+    font-size: 15px;
+    color: black;
+    font-weight: 100;
+    padding-left: 20px;
+    padding-bottom: 5px;
+}
+
+.ad-positions {
+    font-size: 15px;
+    color: black;
+    font-weight: 500;
+    padding-left: 20px;
+    padding-bottom: 5px;
+}
+
+.ad-view-more {
+    font-size: 12px;
+    padding: 5px 20px;
+    margin: 10px;
+    border: none;
+    background-color: rgb(82, 190, 190);
+    box-shadow: 1px 1px 1px rgb(97, 97, 97);
+}
+
+.ad-view-applicants {
+    font-size: 12px;
+    padding: 5px 20px;
+    margin: 10px;
+    border: none;
+    background-color: rgb(82, 190, 190);
+    box-shadow: 1px 1px 1px rgb(97, 97, 97);
 }
