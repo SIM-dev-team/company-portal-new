@@ -302,6 +302,30 @@
     margin-top: 20%;
 }
 
+.logout-modal-title {
+    font-size: 20px;
+    font-weight: 500;
+    padding: 0px;
+    padding-right: 100px;
+}
+
+.logout-modal-text {
+    font-size: 15px;
+    font-weight: 500;
+    padding: 20px 0;
+    padding-right: 200px;
+}
+
+.logout-model-buttons {
+    float: right;
+    padding: 10px;
+}
+
+.logout-model-buttons button {
+    margin: 0 5px;
+    width: 100px;
+}
+
 .profile-edit-details-container {
     height: auto;
     padding: 2px;
@@ -315,6 +339,13 @@
     border-radius: 4px;
     color: white;
     box-shadow: 1px 1px 1px gray;
+}
+
+.edit-profile-title {
+    font-size: 30px;
+    font-weight: 600;
+    color: gray;
+    padding-bottom: 50px;
 }
 
 .profile-content {
