@@ -1,18 +1,49 @@
 import React,{useState , useEffect} from 'react';
 import { useHistory , Link } from "react-router-dom";
 import auth from '../Auth';
+import { Form, Button , Col } from 'react-bootstrap';
+import { useFormik } from 'formik';
 import axios from 'axios';
 import default_logo from '../assets/images/profile_pic_default.png';
 import Advert from '../components/advert';
 import { BeatLoader } from 'react-spinners';
+import Model from 'react-modal';
 
+const modalStyles = {
+    content : {
+      top                   : '50%',
+      left                  : '50%',
+      right                 : 'auto',
+      bottom                : 'auto',
+      marginRight           : '-50%',
+      transform             : 'translate(-50%, -50%)',
+      padding                : '20px'
+    }
+  };
+  
+  const editProfileModalStyles = {
+    content : {
+      top                   : '50%',
+      left                  : '50%',
+      right                 : 'auto',
+      bottom                : 'auto',
+      marginRight           : '-50%',
+      transform             : 'translate(-50%, -50%)',
+      padding               : '20px',
+      height                : '600px',
+      width                 : '50%'
 
+    }
+  };
+Model.setAppElement('#root');
 function Profile(){
     const history = useHistory();
     const [notifications , setNotifications] = useState(false);
     const [ads , setAds] = useState(true);
-    const [isProfileDataLaoded , setIsProfileDataLoaded] = useState(false)
-    const [isAdvertLoaded , setIsAdvertLoaded] = useState(false)
+    const [isProfileDataLaoded , setIsProfileDataLoaded] = useState(false);
+    const [isAdvertLoaded , setIsAdvertLoaded] = useState(false);
+    const [islogoutModelOpen , setIslogoutModelOpen] = useState(false);
+    const [isEditProfileModelOpen , setIsEditProfileModelOpen] = useState(false);
 
     const [company , setCompany] = useState({
         name: '',
@@ -23,8 +54,38 @@ function Profile(){
         contact_number: '',
         email: '',
     });
-
     const [adverts , setAdverts ] = useState([]);
+    const initialValues = {
+        token:'' ,
+        date_created : new Date().toLocaleDateString() ,
+        internship_position : '' ,
+        position_desc : '' ,
+        job_desc : '' ,
+        knowledge_skills : '' ,
+        benefits : '',
+        no_of_positions : '' ,
+        no_of_applicants : '',
+        attachment_url : ''
+    };
+    const validate = values => {
+        let errors = {};
+        if(!values.internship_position){
+        errors.internship_position = 'internship position is required'
+        }
+        if(!values.no_of_positions){
+        errors.no_of_positions = 'a valid number of positions required'
+        }
+        if(!values.position_desc){
+        errors.position_desc = 'short description about the position is required'
+        }
+        return errors;
+    }
+    const onSubmit = (e) =>{}
+        const formik = useFormik({
+            initialValues,
+            onSubmit,
+            validate
+        });
 
     useEffect(()=>{
         axios
@@ -57,9 +118,7 @@ function Profile(){
     }, [])
     
     const logout = ()=>{
-        auth.logout();
-        localStorage.removeItem('token');
-        history.push('/');
+        setIslogoutModelOpen(true);
     }
 
     const notificationsBtn = () =>{
@@ -78,12 +137,12 @@ function Profile(){
     return(
         <div className="profile-content">
             <div className="row">
-                <div  className="loader">
+                <div  className="loader" hidden={isProfileDataLaoded}>
                 <BeatLoader color="gray"loading={!isProfileDataLaoded}/>
                 </div>
                 <div className="col-md-3 company-details card" hidden={!isProfileDataLaoded}>
                     <div className="profile-edit-details-container">
-                        <button className="profile-edit-details">edit</button>
+                        <button className="profile-edit-details" onClick={()=>setIsEditProfileModelOpen(true)}>edit</button>
                     </div>
                     <div className="profile-logo">
                         <img src={company.profile_pic} alt="company-logo" className="logo-image" onClick={profile_pic}/>
@@ -99,7 +158,7 @@ function Profile(){
                         <div>{company.contact_number}</div>
                     </div>
                 </div>
-                <div className="vl"></div>
+                {/* <div className="vl"></div> */}
                 <div>
                     <div className="feed">
                         <div>
@@ -109,11 +168,11 @@ function Profile(){
                         <button className="btn btn-secondary" onClick={logout}>Logout</button>
                     </div>
                     <div className="profile-bottom-content">
-                        {notifications ? <div  className="none-text">No Notifications yet</div> : ''} 
+                        <div hidden={!notifications} className="none-text">No Notifications yet</div>
                         
                         <div hidden={!ads} className="profile-bottom-content-text">
                         <Link to="/newAdvert" props={company.comp_id}><button className="create-new-add">+ Create new ad</button></Link>
-                        <div className="feed-loader"><BeatLoader color="gray" loading={!isAdvertLoaded}/></div>
+                        <BeatLoader color="gray" loading={!isAdvertLoaded}/>
                             <div hidden={adverts.length !== 0 || !isAdvertLoaded} className="none-text">No Advertiesments to show</div> 
                             <div className="ad-list">
                                 {
@@ -124,6 +183,60 @@ function Profile(){
                     </div>
                 </div>
             </div>
+            <Model isOpen={islogoutModelOpen} style={modalStyles}>
+
+                <div className="logout-modal-title">Logout</div>
+                <div className="logout-modal-text">Do you want to logout ?</div>
+                <div className="row logout-model-buttons">
+                <button className="btn btn-primary" onClick={()=>setIslogoutModelOpen(false)}>Cancel</button>
+                <button className="btn btn-danger" 
+                        onClick={
+                            ()=>{auth.logout();
+                                localStorage.removeItem('token');
+                                history.push('/');}
+                            }
+                            >Logout</button>
+                </div>
+                
+            </Model>
+
+            <Model isOpen={isEditProfileModelOpen} style={editProfileModalStyles}>
+            <div className="edit-profile-title">Edit Profile</div>
+                <Form>
+                <Form.Group as={Col}>
+                        <Form.Label>Company Description</Form.Label>
+                        <Form.Control name="description" type="text" value={formik.values.description} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
+                        {(formik.errors.description && formik.touched.description) ? <small className="error">{formik.errors.description}</small> : ''}
+                    </Form.Group>
+
+                    <Form.Group  as={Col}>
+                        <Form.Label>Website Url</Form.Label>
+                        <Form.Control name="comp_website" type="text" value={formik.values.comp_website} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
+                        {(formik.errors.comp_website && formik.touched.comp_website) ? <small className="error">{formik.errors.comp_website}</small> : ''}
+                    </Form.Group>
+                    <Form.Group as={Col}>
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control name="email" type="string" value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
+                            {(formik.errors.email && formik.touched.email) ? <small className="error">{formik.errors.email}</small> : ''}
+                    </Form.Group>
+                    <Form.Row className="form-row">
+                    <Form.Group as={Col}>
+                        <Form.Label>Contact Number</Form.Label>
+                        <Form.Control name="contact_number" type="text" value={formik.values.contact_number} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
+                            {(formik.errors.contact_number && formik.touched.contact_number) ? <small className="error">{formik.errors.contact_number}</small> : ''}
+                    </Form.Group>
+                    <Form.Group as={Col}>
+                        <Form.Label>Fax Number</Form.Label>
+                        <Form.Control name="fax_number" type="text" value={formik.values.fax_number} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
+                            {(formik.errors.fax_number && formik.touched.fax_number) ? <small className="error">{formik.errors.fax_number}</small> : ''}
+                    </Form.Group>
+                    </Form.Row>
+                    <div className="row logout-model-buttons">
+                        <button className="btn btn-primary"onClick={()=>setIsEditProfileModelOpen(false)}>Cancel</button>
+                        <button className="btn btn-warning">Update</button>
+                    </div>
+                </Form>
+            </Model>
         </div>
     );
 }
