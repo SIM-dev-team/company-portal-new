@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import axios from 'axios';
+import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 const initialValues = {email: ''}
@@ -68,6 +69,7 @@ function ForgotPassword(){
                     />
                     {(formik.errors.email && formik.touched.email) ? <small className="error">{formik.errors.email}</small> : ''}
                 </Form.Group>
+                <Link to="/login" className="forgot-password">Back to login</Link>
                 <Button variant="primary" type="submit" disabled={formik.errors.email || !formik.touched.email}>
                     Confirm
                 </Button>

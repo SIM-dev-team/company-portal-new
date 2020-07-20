@@ -17,6 +17,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import newAdvert from './views/newAdvert';
 
 
 
@@ -31,6 +32,7 @@ function App() {
           <Route exact path = '/register' component= {Register}/>
           <Route exact path = '/' component= {Welcome}/>
           <ProtectedRoute exact path = '/profile' component= {Profile}/>
+          <ProtectedRoute exact path = '/newAdvert' component= {newAdvert}/>
           <Route exact path = '/verify-email' component= {EmailVerify}/>
           <Route exact path = '/about' component= {About}/>
           <Route exact path = '/contact' component= {Contact}/>
