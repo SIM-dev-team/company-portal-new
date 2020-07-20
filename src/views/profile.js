@@ -1,16 +1,18 @@
 import React,{useState , useEffect} from 'react';
-import logo from '../assets/images/logo.jpg';
-import { useHistory } from "react-router-dom";
+import { useHistory , Link } from "react-router-dom";
 import auth from '../Auth';
 import axios from 'axios';
 import default_logo from '../assets/images/profile_pic_default.png';
 import Advert from '../components/advert';
+import { BeatLoader } from 'react-spinners';
 
 
 function Profile(){
     const history = useHistory();
-    const [notifications , setNotifications] = useState(true);
-    const [ads , setAds] = useState(false);
+    const [notifications , setNotifications] = useState(false);
+    const [ads , setAds] = useState(true);
+    const [isProfileDataLaoded , setIsProfileDataLoaded] = useState(false)
+    const [isAdvertLoaded , setIsAdvertLoaded] = useState(false)
 
     const [company , setCompany] = useState({
         name: '',
@@ -22,11 +24,12 @@ function Profile(){
         email: '',
     });
 
+    const [adverts , setAdverts ] = useState([]);
+
     useEffect(()=>{
         axios
       .get(`http://localhost:5000/company/get/${localStorage.getItem('token')}`)
       .then(res => {
-          console.log(res)
           const currentCompany = {
               name: res.data.comp_name,
               profile_pic: (res.data.profile_pic_url === null ? default_logo : res.data.profile_pic_url ),
@@ -37,7 +40,18 @@ function Profile(){
               email: res.data.email
           }
           setCompany(currentCompany);
-          console.log(res);
+          setIsProfileDataLoaded(true)
+      })
+      .catch(err => console.error(err));
+    }, [])
+
+    useEffect(()=>{
+        const token = localStorage.getItem('token');
+        axios
+      .post(`http://localhost:5000/advert/getAdvertsByCompany`,{token})
+      .then(res => {
+          setAdverts(res.data);
+          setIsAdvertLoaded(true);
       })
       .catch(err => console.error(err));
     }, [])
@@ -64,7 +78,10 @@ function Profile(){
     return(
         <div className="profile-content">
             <div className="row">
-                <div className="col-md-3 company-details card">
+                <div  className="loader">
+                <BeatLoader color="gray"loading={!isProfileDataLaoded}/>
+                </div>
+                <div className="col-md-3 company-details card" hidden={!isProfileDataLaoded}>
                     <div className="profile-edit-details-container">
                         <button className="profile-edit-details">edit</button>
                     </div>
@@ -86,52 +103,27 @@ function Profile(){
                 <div>
                     <div className="feed">
                         <div>
-                            <button className={notifications ? 'active btn btn-primary' : 'btn btn-primary'} onClick={notificationsBtn}>Notifications</button>
                             <button className={ads ? 'active btn btn-primary' : 'btn btn-primary'} onClick={adsBtn}>Advertiesments</button>
+                            <button className={notifications ? 'active btn btn-primary' : 'btn btn-primary'} onClick={notificationsBtn}>Notifications</button>
                         </div>
                         <button className="btn btn-secondary" onClick={logout}>Logout</button>
                     </div>
                     <div className="profile-bottom-content">
-                        <div hidden={notifications} className="none-text">No Notifications yet</div>
-                        <div hidden={ads} className="profile-bottom-content-text">
-                            <button className="create-new-add">+ Create new ad</button>
-                            {/* <div hidden={!ads} className="none-text">No Advertiesments to show</div>  */}
+                        {notifications ? <div  className="none-text">No Notifications yet</div> : ''} 
+                        
+                        <div hidden={!ads} className="profile-bottom-content-text">
+                        <Link to="/newAdvert" props={company.comp_id}><button className="create-new-add">+ Create new ad</button></Link>
+                        <div className="feed-loader"><BeatLoader color="gray" loading={!isAdvertLoaded}/></div>
+                            <div hidden={adverts.length !== 0 || !isAdvertLoaded} className="none-text">No Advertiesments to show</div> 
                             <div className="ad-list">
-                                <Advert/>
-                                <Advert/>
+                                {
+                                    adverts.map(advert => <Advert key={advert.ad_id} advert={advert}/>)
+                                }
                             </div>
                         </div> 
                     </div>
                 </div>
             </div>
-            {/* <div className="row">
-                <div className="profile-logo">
-                    <img src={company.profile_pic} alt="company-logo" className="logo-image" onClick={profile_pic}/>
-                </div>
-                <div className="profile-description">
-                    <div className="row top-description">
-                    <div className="profile-comp-name">{company.name}</div>
-                    <div className={company.is_approved ? 'approved' : 'not-approved'}>{company.is_approved ? 'approved by pdc': 'not approved by pdc yet'}</div>
-                    </div>
-                
-                    <div>
-                        {company.description}
-                    </div>
-                    <div><a href={'//'+company.comp_website} rel="noopener noreferrer" target="_blank">{company.comp_website}</a></div>
-                    <div className="row profile-btn">
-                <div>
-                <button className={notifications ? 'active btn btn-primary' : 'btn btn-primary'} onClick={notificationsBtn}>Notifications</button>
-                <button className={ads ? 'active btn btn-primary' : 'btn btn-primary'} onClick={adsBtn}>Advertiesments</button>
-                </div>
-                <button className="btn btn-secondary" onClick={logout}>Logout</button>
-            </div>
-                </div>
-            </div>
-            
-            <div className="profile-bottom-content">
-              <div hidden={!notifications} className="profile-bottom-content-text">No Notifications yet</div>  
-              <div hidden={!ads} className="profile-bottom-content-text">PDC is not Requesting Advertiesments yet</div> 
-            </div> */}
         </div>
     );
 }

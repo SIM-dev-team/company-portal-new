@@ -20,7 +20,7 @@
 .navbar ul {
     display: flex;
     flex-direction: row;
-    margin: 0 200px;
+    margin: 0 40px;
 }
 
 .navbar ul li {
@@ -288,7 +288,18 @@
     box-shadow: 2px 3px 3px rgb(189, 199, 199);
     padding: 10px;
     /* background: rgb(120, 216, 234); */
-    background: linear-gradient(32deg, rgb(117, 202, 235) 0%, rgba(255, 255, 255, 0) 48%);
+    background: linear-gradient( rgba(0, 0, 0, 0.185) 100%, rgba(243, 44, 44, 0) 78%);
+    /* background: red; */
+}
+
+.loader {
+    margin: auto;
+    margin-left: 10%;
+}
+
+.feed-loader {
+    text-align: center;
+    margin-top: 20%;
 }
 
 .profile-edit-details-container {
@@ -323,7 +334,7 @@
 }
 
 .company-description {
-    background-color: rgb(226, 225, 225);
+    background-color: rgb(255, 255, 255);
     padding: 5px;
     margin: 2px;
     border-radius: 5px;
@@ -353,6 +364,8 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    background-color: rgb(207, 207, 207);
+    border-radius: 5px;
 }
 
 .create-new-add {
@@ -439,7 +452,6 @@
     width: 1px;
     height: 80vh;
     background-color: rgb(109, 109, 109);
-    margin-left: 30%;
 }
 
 
@@ -497,7 +509,8 @@
     padding: 5px 20px;
     margin: 10px;
     border: none;
-    background-color: rgb(82, 190, 190);
+    color: white;
+    background-color: rgb(31, 161, 236);
     box-shadow: 1px 1px 1px rgb(97, 97, 97);
 }
 
@@ -506,6 +519,66 @@
     padding: 5px 20px;
     margin: 10px;
     border: none;
-    background-color: rgb(82, 190, 190);
+    color: white;
+    background-color: rgb(31, 161, 236);
     box-shadow: 1px 1px 1px rgb(97, 97, 97);
+}
+
+
+/*===================================================== create new advert page css ==================================================== */
+
+.create-new-ad {
+    margin: 60px;
+}
+
+.create-new-advert-title {
+    color: gray;
+    font-size: 30px;
+    font-weight: 500;
+    padding: 30px 0;
+}
+
+.new-advert-buttons {
+    padding-left: 20px;
+}
+
+.create-ad-form {
+    width: 60%;
+    padding-left: 20px;
+}
+
+.create-ad-preview {
+    position: fixed !important;
+    right: 5%;
+    top: 15%;
+    width: 33%;
+    height: 70%;
+    background-color: rgb(231, 231, 231);
+    box-shadow: 1px 1px 1px gray;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.ad-preview-title {
+    text-align: center;
+    font-size: 25px;
+    font-weight: 500;
+    color: rgb(94, 94, 94);
+}
+
+.ad-preview-lable {
+    padding-left: 10px;
+    padding-bottom: 10px;
+    font-weight: 500;
+}
+
+.ad-preview-data {
+    font-weight: 300;
+}
+
+.ad-new-button-block {
+    position: fixed !important;
+    bottom: 5%;
+    right: 7%;
+    ;
 }
