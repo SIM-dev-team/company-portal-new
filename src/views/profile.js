@@ -1,7 +1,7 @@
 import React,{useState , useEffect} from 'react';
 import { useHistory , Link } from "react-router-dom";
 import auth from '../Auth';
-import { Form, Button , Col } from 'react-bootstrap';
+import { Form , Col } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import default_logo from '../assets/images/profile_pic_default.png';
@@ -31,7 +31,6 @@ const modalStyles = {
       marginRight           : '-50%',
       transform             : 'translate(-50%, -50%)',
       padding               : '20px',
-      height                : '600px',
       width                 : '50%'
 
     }
@@ -46,6 +45,7 @@ function Profile(){
     const [isAdvertLoaded , setIsAdvertLoaded] = useState(false);
     const [islogoutModelOpen , setIslogoutModelOpen] = useState(false);
     const [isEditProfileModelOpen , setIsEditProfileModelOpen] = useState(false);
+    const [isUpdating , setIsUpdating] = useState(false);
 
     const [company , setCompany] = useState({
         name: '',
@@ -55,40 +55,41 @@ function Profile(){
         comp_website: '',
         contact_number: '',
         email: '',
-        comp_id : ''
+        comp_id : '',
+        fax_number: ''
     });
     const [adverts , setAdverts ] = useState([]);
-    const initialValues = {
-        token:'' ,
-        date_created : new Date().toLocaleDateString() ,
-        internship_position : '' ,
-        position_desc : '' ,
-        job_desc : '' ,
-        knowledge_skills : '' ,
-        benefits : '',
-        no_of_positions : '' ,
-        no_of_applicants : '',
-        attachment_url : ''
-    };
+
     const validate = values => {
         let errors = {};
-        if(!values.internship_position){
-        errors.internship_position = 'internship position is required'
+        if(!values.description){
+        errors.description = 'description is required'
         }
-        if(!values.no_of_positions){
-        errors.no_of_positions = 'a valid number of positions required'
+        if(!values.contact_number){
+            errors.contact_number = 'Company contact number is required'
+        }else if(values.contact_number.toString().length < 9){
+            errors.contact_number = 'contact number is invalid'
         }
-        if(!values.position_desc){
-        errors.position_desc = 'short description about the position is required'
+        if(!values.fax_number){
+        errors.fax_number = 'fax number is required'
+        }
+        if(!values.comp_website){
+            errors.comp_website = 'Company website url is required'
+        // eslint-disable-next-line no-useless-escape
+        }else if(!/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/.test(values.comp_website)){
+            errors.comp_website = 'invalid url format'
         }
         return errors;
     }
+
     const onSubmit = (e) =>{}
-        const formik = useFormik({
-            initialValues,
-            onSubmit,
-            validate
-        });
+
+    const formikTwo = useFormik({
+        initialValues : company,
+        enableReinitialize:true,
+        onSubmit,
+        validate
+    });
 
     useEffect(()=>{
         axios
@@ -102,10 +103,11 @@ function Profile(){
               comp_website: res.data.comp_website,
               contact_number: res.data.contact_number,
               email: res.data.email,
-              comp_id: res.data.comp_id
+              comp_id: res.data.comp_id,
+              fax_number : res.data.fax_number
           }
           setCompany(currentCompany);
-          setIsProfileDataLoaded(true)
+          setIsProfileDataLoaded(true);
       })
       .catch(err => console.error(err));
     }, [])
@@ -123,7 +125,6 @@ function Profile(){
     
     const logout = ()=>{
         setIslogoutModelOpen(true);
-        console.log(company)
     }
 
     const notificationsBtn = () =>{
@@ -136,9 +137,6 @@ function Profile(){
         setNotifications(false);
     }
 
-    const profile_pic = () =>{
-        console.log('clicked')
-    }
     const handleImageChange = (e) => {
         if(e.target.files[0]){
             setProfileImage(e.target.files[0]);
@@ -146,22 +144,57 @@ function Profile(){
     }
 
     const updateProfile = (e)=>{
+        setIsUpdating(true);
         e.preventDefault();
-        const UploadImage = storage.ref(`CompanyProfilePictures/${company.comp_id}`).put(profileImage);
-        UploadImage.on('state_changed' ,
-        snapshot => {},
-        error => {
-            console.log(error)
-        },
-        ()=>storage
-        .ref('CompanyProfilePictures')
-        .child(company.comp_id.toString())
-        .getDownloadURL()
-        .then(url =>{
-            console.log(url)
-        })
+        try{
+            const UploadImage = storage.ref(`CompanyProfilePictures/${company.comp_id}`).put(profileImage);
+            UploadImage.on('state_changed' ,
+            snapshot => {},
+            error => {
+                console.log(error)
+            },
+            ()=>storage
+            .ref('CompanyProfilePictures')
+            .child(company.comp_id.toString())
+            .getDownloadURL()
+            .then(url =>{
+                const updatedData = {
+                    profile_pic: url,
+                    comp_id:company.comp_id,
+                    description: formikTwo.values.description,
+                    comp_website: formikTwo.values.comp_website,
+                    contact_number: formikTwo.values.contact_number,
+                    fax_number : formikTwo.values.fax_number
+                }
+                axios
+                  .post(`http://localhost:5000/company/update`,{updatedData})
+                  .then(res => {
+                      console.log(res);
+                      setIsUpdating(false);
+                      window.location.reload();
+                    })
+                  .catch(err => console.error(err));
+            })
+            )
+        }catch(e){
+            const updatedData = {
+                profile_pic: company.profile_pic,
+                comp_id:company.comp_id,
+                description: formikTwo.values.description,
+                comp_website: formikTwo.values.comp_website,
+                contact_number: formikTwo.values.contact_number,
+                fax_number : formikTwo.values.fax_number
+            }
+            axios
+                .post(`http://localhost:5000/company/update`,{updatedData})
+                .then(res => {
+                    console.log(res);
+                    setIsUpdating(false);
+                    window.location.reload();
+                  })
+                .catch(err => console.error(err));
+        }
 
-        )
     }
     return(
         <div className="profile-content">
@@ -174,7 +207,7 @@ function Profile(){
                         <button className="profile-edit-details" onClick={()=>setIsEditProfileModelOpen(true)}>edit</button>
                     </div>
                     <div className="profile-logo">
-                        <img src={company.profile_pic} alt="company-logo" className="logo-image" onClick={profile_pic}/>
+                        <img src={company.profile_pic} alt="company-logo" className="logo-image"/>
                     </div>
                     <div className="profile-comp-name">{company.name}</div>
                     <hr/>
@@ -234,38 +267,71 @@ function Profile(){
                 <Form>
                 <Form.Group as={Col}>
                         <Form.Label>Company Description</Form.Label>
-                        <Form.Control name="description" type="text" value={formik.values.description} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
-                        {(formik.errors.description && formik.touched.description) ? <small className="error">{formik.errors.description}</small> : ''}
+                        <Form.Control 
+                         name="description" 
+                         type="text" 
+                         value={formikTwo.values.description} 
+                         onChange={formikTwo.handleChange} 
+                         onBlur={formikTwo.handleBlur}/>
+                        {(formikTwo.errors.description && formikTwo.touched.description) ? <small className="error">{formikTwo.errors.description}</small> : ''}
                     </Form.Group>
 
                     <Form.Group  as={Col}>
                         <Form.Label>Website Url</Form.Label>
-                        <Form.Control name="comp_website" type="text" value={formik.values.comp_website} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
-                        {(formik.errors.comp_website && formik.touched.comp_website) ? <small className="error">{formik.errors.comp_website}</small> : ''}
-                    </Form.Group>
-                    <Form.Group as={Col}>
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control name="email" type="string" value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
-                            {(formik.errors.email && formik.touched.email) ? <small className="error">{formik.errors.email}</small> : ''}
+                        <Form.Control 
+                        name="comp_website" 
+                        type="text" 
+                        value={formikTwo.values.comp_website} 
+                        onChange={formikTwo.handleChange} 
+                        onBlur={formikTwo.handleBlur}/>
+                        {(formikTwo.errors.comp_website && formikTwo.touched.comp_website) ? <small className="error">{formikTwo.errors.comp_website}</small> : ''}
                     </Form.Group>
                     <Form.Row className="form-row">
                     <Form.Group as={Col}>
                         <Form.Label>Contact Number</Form.Label>
-                        <Form.Control name="contact_number" type="text" value={formik.values.contact_number} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
-                            {(formik.errors.contact_number && formik.touched.contact_number) ? <small className="error">{formik.errors.contact_number}</small> : ''}
+                        <Form.Control 
+                        name="contact_number" 
+                        type="text" 
+                        value={formikTwo.values.contact_number} 
+                        onChange={formikTwo.handleChange} 
+                        onBlur={formikTwo.handleBlur}/>
+                            {(formikTwo.errors.contact_number && formikTwo.touched.contact_number) ? <small className="error">{formikTwo.errors.contact_number}</small> : ''}
                     </Form.Group>
                     <Form.Group as={Col}>
                         <Form.Label>Fax Number</Form.Label>
-                        <Form.Control name="fax_number" type="text" value={formik.values.fax_number} onChange={formik.handleChange} onBlur={formik.handleBlur}/>
-                            {(formik.errors.fax_number && formik.touched.fax_number) ? <small className="error">{formik.errors.fax_number}</small> : ''}
+                        <Form.Control 
+                        name="fax_number" 
+                        type="text" 
+                        value={formikTwo.values.fax_number} 
+                        onChange={formikTwo.handleChange} 
+                        onBlur={formikTwo.handleBlur}/>
+                            {(formikTwo.errors.fax_number && formikTwo.touched.fax_number) ? <small className="error">{formikTwo.errors.fax_number}</small> : ''}
                     </Form.Group>
                     </Form.Row>
-                    <input type="file" onChange={handleImageChange}/>
-                    <div className="row logout-model-buttons">
-                        <button className="btn btn-primary"onClick={()=>setIsEditProfileModelOpen(false)}>Cancel</button>
-                        <button className="btn btn-warning" onClick={updateProfile}>Update</button>
+                    <Form.Group as={Col}>
+                    <Form.Label>Select a Profile Picture</Form.Label>
+                    <br/>
+                        <input type="file" onChange={handleImageChange}/>
+                    </Form.Group>
+                    
+                    <div className="row editProfile-model-buttons ">
+                        <button className="btn btn-primary"onClick={()=>setIsEditProfileModelOpen(false)} disabled={isUpdating}>Cancel</button>
+                        <button 
+                            className="btn btn-warning" 
+                            onClick={updateProfile}
+                            disabled={
+                                formikTwo.errors.description ||
+                                formikTwo.errors.comp_website ||
+                                formikTwo.errors.contact_number ||
+                                formikTwo.errors.fax_number ||
+                                isUpdating
+                            }
+                            >Update</button>
+                            
                     </div>
+                    
                 </Form>
+                <small className="updating-text" hidden={!isUpdating}>Updating ...</small>
             </Model>
         </div>
     );
