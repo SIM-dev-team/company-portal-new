@@ -8,6 +8,7 @@ import default_logo from '../assets/images/profile_pic_default.png';
 import Advert from '../components/advert';
 import { BeatLoader } from 'react-spinners';
 import Model from 'react-modal';
+import { storage } from '../firebase';
 
 const modalStyles = {
     content : {
@@ -40,6 +41,7 @@ function Profile(){
     const history = useHistory();
     const [notifications , setNotifications] = useState(false);
     const [ads , setAds] = useState(true);
+    const [profileImage , setProfileImage] = useState(null);
     const [isProfileDataLaoded , setIsProfileDataLoaded] = useState(false);
     const [isAdvertLoaded , setIsAdvertLoaded] = useState(false);
     const [islogoutModelOpen , setIslogoutModelOpen] = useState(false);
@@ -53,6 +55,7 @@ function Profile(){
         comp_website: '',
         contact_number: '',
         email: '',
+        comp_id : ''
     });
     const [adverts , setAdverts ] = useState([]);
     const initialValues = {
@@ -98,7 +101,8 @@ function Profile(){
               is_approved:res.data.is_approved,
               comp_website: res.data.comp_website,
               contact_number: res.data.contact_number,
-              email: res.data.email
+              email: res.data.email,
+              comp_id: res.data.comp_id
           }
           setCompany(currentCompany);
           setIsProfileDataLoaded(true)
@@ -119,6 +123,7 @@ function Profile(){
     
     const logout = ()=>{
         setIslogoutModelOpen(true);
+        console.log(company)
     }
 
     const notificationsBtn = () =>{
@@ -133,6 +138,30 @@ function Profile(){
 
     const profile_pic = () =>{
         console.log('clicked')
+    }
+    const handleImageChange = (e) => {
+        if(e.target.files[0]){
+            setProfileImage(e.target.files[0]);
+        }
+    }
+
+    const updateProfile = (e)=>{
+        e.preventDefault();
+        const UploadImage = storage.ref(`CompanyProfilePictures/${company.comp_id}`).put(profileImage);
+        UploadImage.on('state_changed' ,
+        snapshot => {},
+        error => {
+            console.log(error)
+        },
+        ()=>storage
+        .ref('CompanyProfilePictures')
+        .child(company.comp_id.toString())
+        .getDownloadURL()
+        .then(url =>{
+            console.log(url)
+        })
+
+        )
     }
     return(
         <div className="profile-content">
@@ -231,9 +260,10 @@ function Profile(){
                             {(formik.errors.fax_number && formik.touched.fax_number) ? <small className="error">{formik.errors.fax_number}</small> : ''}
                     </Form.Group>
                     </Form.Row>
+                    <input type="file" onChange={handleImageChange}/>
                     <div className="row logout-model-buttons">
                         <button className="btn btn-primary"onClick={()=>setIsEditProfileModelOpen(false)}>Cancel</button>
-                        <button className="btn btn-warning">Update</button>
+                        <button className="btn btn-warning" onClick={updateProfile}>Update</button>
                     </div>
                 </Form>
             </Model>
