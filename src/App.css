@@ -3,15 +3,17 @@
 
 /*=============================================== navbar css ============================================*/
 
+
+/* 
 :any-link {
     text-decoration: none;
     color: white;
     border-radius: 10px;
-}
+} */
 
 :any-link:hover {
     text-decoration: none;
-    background-color: rgba(65, 64, 64, 0.055);
+    /* background-color: rgba(65, 64, 64, 0.055); */
     border-radius: 10px;
 }
 
@@ -296,6 +298,10 @@
     /* background: rgb(120, 216, 234); */
     background: linear-gradient( rgba(5, 102, 146, 0.856) 100%, rgba(163, 189, 202, 0) 78%);
     /* background: red; */
+}
+
+.comp_website {
+    color: rgb(255, 255, 255)
 }
 
 .loader {
@@ -631,6 +637,16 @@
     background-color: rgb(199, 241, 247);
     margin-bottom: 5px;
     border-radius: 10px;
+}
+
+.pending-advert-short {
+    font-size: 15px;
+    margin: 10px;
+    background-color: rgb(233, 90, 90);
+    height: 25px;
+    padding: 0 20px;
+    border-radius: 10px;
+    color: white;
 }
 
 
