@@ -215,7 +215,7 @@ function Profile(){
                     <div className="contact-details">Contact details</div>
                     <hr/>
                     <div className="contact-details-content">
-                        <div><a href={'//'+company.comp_website} rel="noopener noreferrer" target="_blank">{company.comp_website}</a></div>
+                        <div><a className="comp_website" href={'//'+company.comp_website} rel="noopener noreferrer" target="_blank">{company.comp_website}</a></div>
                         <div>{company.email}</div>
                         <div>{company.contact_number}</div>
                     </div>
