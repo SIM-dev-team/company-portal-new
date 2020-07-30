@@ -115,12 +115,13 @@ function Profile(){
     useEffect(()=>{
         const token = localStorage.getItem('token');
         axios
-      .post(`http://localhost:5000/advert/getAdvertsByCompany`,{token})
-      .then(res => {
-          setAdverts(res.data);
-          setIsAdvertLoaded(true);
-      })
-      .catch(err => console.error(err));
+        .post(`http://localhost:5000/advert/getAdvertsByCompany`,{token})
+        .then(res => {
+            setAdverts(res.data);
+            console.log("data" + res.data)
+            setIsAdvertLoaded(true);
+        })
+        .catch(err =>{ console.error(err);setIsAdvertLoaded(true);});
     }, [])
     
     const logout = ()=>{
@@ -233,7 +234,7 @@ function Profile(){
                         <div hidden={!notifications} className="none-text">No Notifications yet</div>
                         
                         <div hidden={!ads} className="profile-bottom-content-text">
-                        <Link to="/newAdvert" props={company.comp_id}><button className="create-new-add">+ Create new ad</button></Link>
+                        <Link to="/newAdvert" props={company}><button className="create-new-add">+ Create new ad</button></Link>
                         <BeatLoader color="gray" loading={!isAdvertLoaded}/>
                             <div hidden={adverts.length !== 0 || !isAdvertLoaded} className="none-text">No Advertiesments to show</div> 
                             <div className="ad-list">
