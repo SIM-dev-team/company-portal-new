@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState , useEffect} from 'react';
 import { Form, Button , Col } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import axios from 'axios';
@@ -13,7 +13,19 @@ var randomstring = require("randomstring");
 function NewAdvert(props) {
     const token = localStorage.getItem('token');
     const [advertImage , setAdvertImage] = useState(null);
-    const [isUploading , setIsUploading ] = useState(false)
+    const [isUploading , setIsUploading ] = useState(false);
+    const [categoryList , setCategoryList] = useState([]);
+    const [company , setCompany] = useState({
+        name: '',
+        profile_pic: '',
+        description: '',
+        is_approved: false,
+        comp_website: '',
+        contact_number: '',
+        email: '',
+        comp_id : '',
+        fax_number: ''
+    });
     const history = useHistory();
     const initialValues = {
                         token:token ,
@@ -47,7 +59,6 @@ function NewAdvert(props) {
         setIsUploading(true);
         e.preventDefault();
         const r = randomstring.generate();
-        console.log(r);
         const UploadImage = storage.ref(`AdvertiesmentImages/${r}`).put(advertImage);
         UploadImage.on('state_changed' ,
             snapshot => {},
@@ -60,9 +71,12 @@ function NewAdvert(props) {
             .getDownloadURL()
             .then(url =>{
                 const advertData = {
-                    profile_pic: url,
+                    profile_pic: company.profile_pic,
+                    cat_id : formik.values.internship_position.substring(0,3),
+                    comp_name : company.name,
+                    comp_website : company.comp_website,
                     date_created:formik.values.date_created,
-                    internship_position: formik.values.internship_position,
+                    internship_position: formik.values.internship_position.substring(3),
                     position_desc: formik.values.position_desc,
                     job_desc: formik.values.job_desc,
                     knowledge_skills : formik.values.knowledge_skills,
@@ -90,6 +104,37 @@ function NewAdvert(props) {
                 })
             )
     }
+
+    useEffect(()=>{
+        axios.get("http://localhost:5000/advert/getCategories")
+                .then(res => {
+                        setCategoryList(res.data);
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+    },[])
+
+    useEffect(()=>{
+        axios
+      .get(`http://localhost:5000/company/get/${localStorage.getItem('token')}`)
+      .then(res => {
+          const currentCompany = {
+              name: res.data.comp_name,
+              profile_pic:res.data.profile_pic_url,
+              description: res.data.description,
+              is_approved:res.data.is_approved,
+              comp_website: res.data.comp_website,
+              contact_number: res.data.contact_number,
+              email: res.data.email,
+              comp_id: res.data.comp_id,
+              fax_number : res.data.fax_number
+          }
+          setCompany(currentCompany);
+      })
+      .catch(err => console.error(err));
+    }, [])
+
     const formik = useFormik({
         initialValues,
         onSubmit,
@@ -102,6 +147,7 @@ function NewAdvert(props) {
     }
     return (
         <div className="create-new-ad">
+            {console.log(company.profile_pic)}
             <div className="row">
             <div className="create-ad-form">
             <Form onSubmit={onSubmit}>
@@ -119,11 +165,12 @@ function NewAdvert(props) {
                                     onBlur = {formik.handleBlur}
                                 >
                                 <option defaultChecked disabled>Select intenship position</option>
-                                <option>Software Engineering</option>
+                                {categoryList.map(cat => <option key={cat.cat_id} value={cat.cat_id + ' ' + cat.cat_name}>{cat.cat_name}</option>)}
+                                {/* <option>Software Engineering</option>
                                 <option>Quality Assuarance</option>
                                 <option>Business Analyst</option>
                                 <option>Progect Management</option>
-                                <option>Web Development</option>
+                                <option>Web Development</option> */}
                                 </Form.Control>
                             </Form.Group>
 
@@ -193,7 +240,7 @@ function NewAdvert(props) {
                 <div className="create-ad-preview">
                     <div className="ad-preview-title">Your Advertiesment</div>
                     <hr/>
-                    <div className="ad-preview-lable">Internship Position : <span className="ad-preview-data">{formik.values.internship_position}</span></div>
+                    <div className="ad-preview-lable">Internship Position : <span className="ad-preview-data">{formik.values.internship_position.substring(3)}</span></div>
                     <div className="ad-preview-lable">Number of positions : <span className="ad-preview-data">{formik.values.no_of_positions}</span></div>
                     <div className="ad-preview-lable">Position description :<span className="ad-preview-data">{formik.values.position_desc}</span></div>
                     <div className="ad-preview-lable">Work to be done : <span className="ad-preview-data">{formik.values.job_desc}</span></div>
