@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
 import Model from 'react-modal';
+import {Link} from 'react-router-dom';
 
 const modalStyles = {
     content : {
@@ -27,14 +28,16 @@ function Advert(props) {
                 <div className="ad-description">{props.advert.position_desc}</div>
                 <div className="ad-positions">no of positions : {props.advert.no_of_positions} </div>
                 <div className="ad-positions">no of applicants : {props.advert.no_of_applicants}</div>
-               <div className="row"><button className="ad-view-applicants" 
-               disabled={ props.advert.no_of_applicants === 0}>View applicants</button><button className="ad-view-more" 
-               onClick={
-                   ()=>{
-                       setIsAdvertModelOpen(true);
-                       console.log(props.advert)
-                    }
-                   }>View more</button></div> 
+               <div className="row">
+                <Link to={`/Applicants/${props.advert.ad_id}`}><button disabled={ props.advert.no_of_applicants === 0} className="ad-view-applicants">View applicants</button></Link>
+                <button className="ad-view-more" 
+                onClick={
+                    ()=>{
+                        setIsAdvertModelOpen(true);
+                        console.log(props.advert)
+                        }
+                    }>View more</button>
+                </div> 
             </div>
             <Model isOpen={isAdvertModelOpen} style={modalStyles}>
                 <div className="view_more_advert row">

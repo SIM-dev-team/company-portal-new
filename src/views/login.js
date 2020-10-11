@@ -34,31 +34,31 @@ function Login(){
         onSubmit,
         validate
     });
-     const submitData = (e) =>{
-    e.preventDefault();
-    
-    axios
-    .post('http://localhost:5000/auth/login', formik.values)
-    .then(res => {
-        if(res.data === 'no user data found'){
-            toast.error('Invalid user data', {position: toast.POSITION.TOP_RIGHT});
-        }else if( res.data ==='Account not verified'){
-            toast.warning('Your e mail is not verified yet please check your email for the verification link', {position: toast.POSITION.TOP_RIGHT});
-        }else if(res.data ==='Incorrect password'){
-            toast.error('Incorrect password', {position: toast.POSITION.TOP_RIGHT});
-        }else{
-            localStorage.setItem('token' , res.data)
-            // toast.success('Logged in successfully', {position: toast.POSITION.TOP_RIGHT});
-            auth.login();
-            history.push('/profile');
-        }
-        } )
-    .catch(err => {
-        console.error(err)
-        toast.error('Error logging in', {position: toast.POSITION.TOP_RIGHT});
-        // history.push('/');
-    });
-}
+    const submitData = (e) =>{
+        e.preventDefault();
+        
+        axios
+        .post('http://localhost:5000/auth/login', formik.values)
+        .then(res => {
+            if(res.data === 'no user data found'){
+                toast.error('Invalid user data', {position: toast.POSITION.TOP_RIGHT});
+            }else if( res.data ==='Account not verified'){
+                toast.warning('Your e mail is not verified yet please check your email for the verification link', {position: toast.POSITION.TOP_RIGHT});
+            }else if(res.data ==='Incorrect password'){
+                toast.error('Incorrect password', {position: toast.POSITION.TOP_RIGHT});
+            }else{
+                localStorage.setItem('token' , res.data)
+                // toast.success('Logged in successfully', {position: toast.POSITION.TOP_RIGHT});
+                auth.login();
+                history.push('/profile');
+            }
+            } )
+        .catch(err => {
+            console.error(err)
+            toast.error('Error logging in', {position: toast.POSITION.TOP_RIGHT});
+            // history.push('/');
+        });
+    }
     return(
         <div className="register-background">
         <div className="login-content">
