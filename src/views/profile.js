@@ -231,7 +231,13 @@ function Profile(){
                         <button className="btn btn-secondary" onClick={logout}>Logout</button>
                     </div>
                     <div className="profile-bottom-content">
-                        <div hidden={!notifications} className="none-text">No Notifications yet</div>
+                        
+                        <div hidden={!notifications} className="notify-text">
+                            <div hidden={notifications.length !== 0} className="none-text1">No Notification yet</div> 
+                            <div className="notify-list">
+                                <Notification/>
+                            </div>
+                        </div> 
                         
                         <div hidden={!ads} className="profile-bottom-content-text">
                         <Link to="/newAdvert" props={company}><button className="create-new-add">+ Create new ad</button></Link>
