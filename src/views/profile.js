@@ -6,6 +6,7 @@ import { useFormik } from 'formik';
 import axios from 'axios';
 import default_logo from '../assets/images/profile_pic_default.png';
 import Advert from '../components/advert';
+import Notification from '../components/notification';
 import { BeatLoader } from 'react-spinners';
 import Model from 'react-modal';
 import { storage } from '../firebase';
