@@ -18,6 +18,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import newAdvert from './views/newAdvert';
+import ViewApplicants from './views/viewApplicants';
 
 
 
@@ -38,6 +39,7 @@ function App() {
           <Route exact path = '/contact' component= {Contact}/>
           <Route exact path = '/forgot-password' component= {ForgotPassword}/>
           <Route exact path = '/reset-password/:key' component= {ResetPassword}/>
+          <Route exact path = '/Applicants/:id' component= {ViewApplicants}/>
       </Switch>
       </Router>
     
