@@ -873,3 +873,73 @@
 .project-link {
     color: rgb(7, 20, 22);
 }
+/*-------------------------------------notification page css---------------------------------------------------*/
+
+.card-notify {
+    width: 90%;
+    margin: 10px 5%;
+    padding: 0 20px;
+    background-color: white;
+    box-shadow: 1px 1px 1px gray;
+}
+
+.notify-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.notify-name {
+    font-size: 20px;
+    color: rgba(0, 0, 0, 0.61);
+    padding: 20px;
+    padding-bottom: 0px;
+}
+
+.notify-by {
+    font-size: 14px;
+    padding-left: 20px;
+    text-align: left;
+    color: rgb(31, 161, 236);
+}
+
+.notify-close {
+    font-size: 15px;
+    padding: 5px 20px;
+    margin: 10px;
+    border: none;
+    color: white;
+    background-color: rgb(31, 161, 236);
+    box-shadow: 1px 1px 1px rgb(97, 97, 97);
+}
+
+.notify-description {
+    font-size: 15px;
+    color: black;
+    font-weight: 100;
+    padding: 20px;
+    padding-bottom: 5px;
+    text-align: left;
+
+}
+
+.notify-text {
+    margin: auto;
+    font-size: 40px;
+    padding: 20px;
+    font-weight: 400;
+    color: rgb(212, 213, 214);
+}
+
+.none-text1 {
+    font-size: 30px;
+    font-weight: 200;
+    color: rgb(150, 150, 150);
+    text-align: center;
+    margin-top: 23%;
+}
+
+.notify-list {
+    display: grid;
+    padding-top: 30px;
+}
