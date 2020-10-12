@@ -340,7 +340,7 @@
 }
 
 .logout-model-buttons button {
-    margin: 0 5px;
+    margin: 10px 5px;
     width: 100px;
 }
 
@@ -720,4 +720,156 @@
     position: fixed !important;
     bottom: 5%;
     right: 7%;
+}
+
+.view-applicants-content {
+    margin: 30px;
+    margin-top: 80px;
+    min-height: 50vh;
+    background-color: rgb(235, 235, 235);
+    box-shadow: 0px 0px 50px -3px rgb(185, 183, 183);
+}
+
+.view-applicants-content-header {
+    color: gray;
+    font-size: 30px;
+    padding: 20px;
+    padding-left: 40px;
+}
+
+.student-card {
+    background-color: rgb(211, 216, 216);
+    height: 90px;
+    margin: 10px 30px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-radius: 10px;
+}
+
+.student-card-profile-pic {
+    width: 70px;
+    height: 70px;
+    margin-left: 100px;
+}
+
+.student-card-name {
+    font-size: 20px;
+    font-weight: 500;
+    padding-left: 100px;
+}
+
+.student-card-available {
+    margin-left: 300px;
+    background-color: rgb(115, 206, 115);
+    padding: 1px 5px;
+    border-radius: 5px;
+    color: white;
+}
+
+.student-card-unavailable {
+    margin-left: 300px;
+    background-color: rgb(206, 115, 123);
+    padding: 1px 10px;
+    border-radius: 5px;
+    color: white;
+}
+
+.student-card-view-profile {
+    border: none;
+    margin-left: 30px;
+    background-color: rgb(255, 255, 255);
+    padding: 1px 40px;
+    box-shadow: 0px 0px 50px -3px rgb(185, 183, 183);
+    border-radius: 10px;
+}
+
+.student-modal-profile-pic {
+    width: 150px;
+    height: 150px;
+    border-radius: 75px;
+}
+
+.student-modal-header {
+    display: flex;
+    flex-direction: row;
+}
+
+.view-cv-button {
+    float: right;
+    width: 150px;
+    border: none;
+    background-color: rgb(143, 224, 143);
+    height: 30px;
+    border-radius: 10px;
+    color: black;
+    box-shadow: 1px 1px 1px gray;
+}
+
+.student-modal-topic {
+    padding-top: 30px;
+    font-size: 30px;
+    color: rgb(73, 73, 73);
+}
+
+.student-modal-interested {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.interested-field {
+    font-size: 20px;
+    padding: 0 30px;
+}
+
+.student-modal-buttons {
+    width: 100%;
+    height: 60px;
+}
+
+.student-modal-buttons button {
+    margin-left: 20px;
+}
+
+.select-button {
+    float: right;
+    width: 150px;
+    border: none;
+    background-color: rgb(236, 245, 119);
+    height: 30px;
+    border-radius: 10px;
+    color: black;
+    box-shadow: 1px 1px 1px gray;
+}
+
+
+/* ================================================================ project css ============================================================= */
+
+.project {
+    width: 100%;
+    background-color: rgb(162, 196, 216);
+    box-shadow: 0px 0px 50px -3px rgb(172, 230, 238);
+    padding: 20px;
+    margin: 10px 5px;
+    border-radius: 10px;
+}
+
+.project-name {
+    font-size: 25px;
+    color: rgb(33, 87, 156);
+}
+
+.project-desc {
+    padding-top: 20px;
+    padding-bottom: 10px;
+}
+
+.project-tech {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.project-link {
+    color: rgb(7, 20, 22);
 }

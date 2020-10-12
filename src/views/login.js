@@ -46,6 +46,8 @@ function Login(){
                 toast.warning('Your e mail is not verified yet please check your email for the verification link', {position: toast.POSITION.TOP_RIGHT});
             }else if(res.data ==='Incorrect password'){
                 toast.error('Incorrect password', {position: toast.POSITION.TOP_RIGHT});
+            }else if(res.data === 'Account not approved'){
+                toast.warning('Your Account has not been approved by the PDC yet', {position: toast.POSITION.TOP_RIGHT});
             }else{
                 localStorage.setItem('token' , res.data)
                 // toast.success('Logged in successfully', {position: toast.POSITION.TOP_RIGHT});
